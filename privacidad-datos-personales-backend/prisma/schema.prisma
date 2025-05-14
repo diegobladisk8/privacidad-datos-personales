@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+generator crud {
+  provider = "prisma-crud-generator"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model bitacora_configuracion {
+  id_bitacora_configuracion BigInt        @id @default(autoincrement())
+  id_configuracion          BigInt
+  flujo                     String        @db.VarChar(50)
+  finalidad                 String        @db.VarChar(50)
+  descripcion               String?       @db.VarChar(2000)
+  fecha_registro            DateTime      @default(now()) @db.Timestamp(6)
+  fecha_desactivacion       DateTime?     @db.Timestamp(6)
+  configuracion             configuracion @relation(fields: [id_configuracion], references: [id_configuracion], onDelete: Cascade, map: "fk_bitacora_configuracion_configuracion")
+}
+
+model canal {
+  id_canal    BigInt  @id @default(autoincrement())
+  descripcion String  @db.VarChar(50)
+  flujo       flujo[]
+}
+
+model clave_producto {
+  id_clave_producto BigInt   @id @default(autoincrement())
+  clave             String   @db.VarChar(50)
+  id_producto       BigInt
+  producto          producto @relation(fields: [id_producto], references: [id_producto], onDelete: Cascade, map: "fk_clave_producto_producto")
+}
+
+model configuracion {
+  id_configuracion        BigInt                   @id @default(autoincrement())
+  id_flujo                BigInt?
+  id_finalidad            BigInt
+  id_producto             BigInt?
+  activo                  Int                      @db.SmallInt
+  fecha_registro          DateTime                 @default(now()) @db.Timestamp(6)
+  fecha_desactivacion     DateTime?                @db.Timestamp(6)
+  fecha_ultimo_cambio     DateTime?                @db.Timestamp(6)
+  dias_duracion_finalidad Int
+  bitacora_configuracion  bitacora_configuracion[]
+  finalidad               finalidad                @relation(fields: [id_finalidad], references: [id_finalidad], onDelete: Cascade, map: "fk_configuracion_finalidad")
+  flujo                   flujo?                   @relation(fields: [id_flujo], references: [id_flujo], onDelete: Cascade, map: "fk_configuracion_flujo")
+  producto                producto?                @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_configuracion_producto")
+  consentimiento          consentimiento[]
+}
+
+model consentimiento {
+  id_consentimiento             BigInt                @id @default(autoincrement())
+  fecha_registro_consentimiento DateTime              @default(now()) @db.Timestamp(6)
+  es_activo                     Int                   @db.SmallInt
+  id_estado_consentimiento      BigInt
+  id_configuracion              BigInt?
+  id_persona                    BigInt
+  descripcion                   String                @db.VarChar(2000)
+  fecha_registro_externo        DateTime?             @db.Timestamp(6)
+  fecha_actualizacion_registro  DateTime?             @db.Timestamp(6)
+  configuracion                 configuracion?        @relation(fields: [id_configuracion], references: [id_configuracion], onDelete: NoAction, onUpdate: NoAction, map: "fk_consentimiento_configuracion")
+  estado_consentimiento         estado_consentimiento @relation(fields: [id_estado_consentimiento], references: [id_estado_consentimiento], onDelete: NoAction, onUpdate: NoAction, map: "fk_consentimiento_estado_consentimiento")
+  persona                       persona               @relation(fields: [id_persona], references: [id_persona], onDelete: NoAction, onUpdate: NoAction, map: "fk_consentimiento_persona")
+  revocacion                    revocacion[]
+}
+
+model estado_consentimiento {
+  id_estado_consentimiento BigInt           @id @default(autoincrement())
+  descripcion              String           @db.VarChar(50)
+  consentimiento           consentimiento[]
+}
+
+model finalidad {
+  id_finalidad   BigInt          @id @default(autoincrement())
+  cabecera       String          @db.VarChar(50)
+  texto_corto    String          @db.VarChar(100)
+  texto_largo    String?         @db.VarChar(2000)
+  es_obligatorio Int             @db.SmallInt
+  fecha_registro DateTime        @default(now()) @db.Timestamp(6)
+  configuracion  configuracion[]
+}
+
+model flujo {
+  id_flujo      BigInt          @id @default(autoincrement())
+  descripcion   String          @db.VarChar(100)
+  id_canal      BigInt
+  configuracion configuracion[]
+  canal         canal           @relation(fields: [id_canal], references: [id_canal], onDelete: Cascade, map: "fk_flujo_canal")
+  revocacion    revocacion[]
+}
+
+model persona {
+  id_persona                   BigInt           @id @default(autoincrement())
+  nombre                       String?          @db.VarChar(100)
+  apellido                     String?          @db.VarChar(100)
+  rut_persona                  Int
+  dv_persona                   String           @db.VarChar(1)
+  rut_tercero                  Int?
+  dv_tercero                   String?          @db.VarChar(1)
+  es_ftu                       Int              @db.SmallInt
+  fecha_registro               DateTime         @default(now()) @db.Timestamp(6)
+  fecha_actualizacion_registro DateTime?        @db.Timestamp(6)
+  consentimiento               consentimiento[]
+}
+
+model producto {
+  id_producto    BigInt           @id @default(autoincrement())
+  descripcion    String           @db.VarChar(500)
+  clave_producto clave_producto[]
+  configuracion  configuracion[]
+}
+
+model revocacion {
+  id_revocacion     BigInt         @id @default(autoincrement())
+  id_consentimiento BigInt
+  id_flujo          BigInt
+  usuario           String         @db.VarChar(50)
+  fecha_revocacion  DateTime       @default(now()) @db.Timestamp(6)
+  descripcion       String?        @db.VarChar(3000)
+  consentimiento    consentimiento @relation(fields: [id_consentimiento], references: [id_consentimiento], onDelete: Cascade, map: "fk_revocacion_flujo")
+  flujo             flujo          @relation(fields: [id_flujo], references: [id_flujo], onDelete: Cascade, map: "fk_revocacion_flujo1")
+}
