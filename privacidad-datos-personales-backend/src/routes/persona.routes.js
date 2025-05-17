@@ -8,9 +8,9 @@ import {
 
 const router = Router();
 
-router.get('/personas', getPersonas);
-router.post('/personas', createPersona);
-router.put('/personas/:id', updatePersona);
-router.delete('/personas/:id', deletePersona);
+router.get('/', getPersonas);
+router.post('/', createPersona);
+router.put('/:id', updatePersona);
+router.delete('/:id', deletePersona);
 
 export default router;
