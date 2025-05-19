@@ -7,8 +7,6 @@ export const getAllBitacoras = async (req, res) => {
         const bitacoras = await prisma.bitacora_configuracion.findMany({
             include: { configuracion: true },
         });
-
-        // Serializador general
         const serializar = (obj) => {
             if (Array.isArray(obj)) {
                 return obj.map(serializar);
