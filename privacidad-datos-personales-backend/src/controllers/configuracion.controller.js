@@ -48,6 +48,8 @@ export const getConfiguraciones = async (req, res) => {
 
 // POST - Crear una configuración
 export const createConfiguracion = async (req, res) => {
+    console.log("Datos recibidos:", req.body);
+
     try {
         const {
             id_flujo,
@@ -64,10 +66,10 @@ export const createConfiguracion = async (req, res) => {
                 id_flujo: id_flujo ? BigInt(id_flujo) : null,
                 id_finalidad: BigInt(id_finalidad),
                 id_producto: id_producto ? BigInt(id_producto) : null,
-                activo,
+                activo: activo ? 1 : 0,
                 fecha_desactivacion: fecha_desactivacion ? new Date(fecha_desactivacion) : null,
                 fecha_ultimo_cambio: fecha_ultimo_cambio ? new Date(fecha_ultimo_cambio) : null,
-                dias_duracion_finalidad,
+                dias_duracion_finalidad: parseInt(dias_duracion_finalidad),
             },
         });
 
@@ -143,3 +145,30 @@ export const deleteConfiguracion = async (req, res) => {
         res.status(500).json({ error: 'Error al eliminar configuración' });
     }
 };
+
+
+export const obtenerDescripcionesConfiguracion = async (req, res) => {
+    try {
+        const resultados = await prisma.$queryRaw`
+            SELECT 
+                c.id_configuracion,  
+                p.descripcion || ' - ' || fi.cabecera || ' - ' || f.descripcion AS descripcion_completa
+            FROM configuracion c 
+            INNER JOIN flujo f ON f.id_flujo = c.id_flujo
+            INNER JOIN finalidad fi ON fi.id_finalidad = c.id_finalidad
+            INNER JOIN producto p ON p.id_producto = c.id_producto
+        `;
+
+
+        const resultadosString = resultados.map(row => ({
+            ...row,
+            id_configuracion: row.id_configuracion.toString(),
+        }));
+
+        res.json(resultadosString);
+    } catch (error) {
+        console.error('Error al obtener descripciones:', error);
+        res.status(500).json({ error: 'Error al obtener configuraciones' });
+    }
+};
+

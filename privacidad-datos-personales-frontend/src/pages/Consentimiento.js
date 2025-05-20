@@ -7,6 +7,8 @@ import consentimientoFormConfig from "../formConfig/consentimientoFormConfig";
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Consentimiento = () => {
     const [consentimientos, setConsentimientos] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -23,7 +25,7 @@ const Consentimiento = () => {
 
     const fetchEstadoConsentimientos = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/estado-consentimientos");
+            const response = await axios.get(`${apiUrl}/api/estado-consentimientos`);
             setEstadoConsentimiento(response.data);
         } catch (error) {
             console.error("Error al cargar los estados consentimientos:", error);
@@ -36,7 +38,7 @@ const Consentimiento = () => {
     };
     const fetchConfiguraciones = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/configuraciones");
+            const response = await axios.get(`${apiUrl}/api/configuraciones`);
             setConfiguraciones(response.data);
         } catch (error) {
             console.error("Error al cargar las configuraciones:", error);
@@ -49,8 +51,7 @@ const Consentimiento = () => {
     };
     const fetchPersonas = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/personas");
-            console.log(response.data)
+            const response = await axios.get(`${apiUrl}/api/personas`);
             setPersonas(response.data);
         } catch (error) {
             console.error("Error al cargar las personas:", error);
@@ -71,8 +72,7 @@ const Consentimiento = () => {
     useEffect(() => {
         const fetchConsentimientos = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/consentimientos");
-                console.log(response.data)
+                const response = await axios.get(`${apiUrl}/api/consentimientos`);
                 setConsentimientos(response.data);
             } catch (error) {
                 console.error("Error al cargar los consentimientos:", error);
@@ -85,13 +85,13 @@ const Consentimiento = () => {
         };
 
         fetchConsentimientos();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedConsentimiento) {
-                await axios.put(`http://localhost:5000/api/consentimientos/${selectedConsentimiento.id_consentimiento}`, formData);
+                await axios.put(`${apiUrl}/api/consentimientos/${selectedConsentimiento.id_consentimiento}`, formData);
                 const updateConsentimiento = consentimientos.map((consen) =>
                     consen.id_consentimiento === selectedConsentimiento.id_consentimiento ? { ...consen, ...formData } : consen
                 );
@@ -103,7 +103,7 @@ const Consentimiento = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/consentimientos', formData);
+                const response = await axios.post(`${apiUrl}/api/consentimientos`, formData);
 
 
                 setConsentimientos([...consentimientos, { ...formData, id_consentimiento: response.data.id_consentimiento }]);
@@ -138,7 +138,7 @@ const Consentimiento = () => {
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/consentimientos/${selectedConsentimiento.id_consentimiento}`, {
+            const response = await fetch(`${apiUrl}/api/consentimientos/${selectedConsentimiento.id_consentimiento}`, {
                 method: "DELETE",
             });
 

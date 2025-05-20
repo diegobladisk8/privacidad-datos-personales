@@ -7,6 +7,8 @@ import bitacoraConfiguracionFormConfig from "../formConfig/bitacoraConfiguracion
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const BitacoraConfiguracion = () => {
     const [bitacoras, setBitacoras] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -19,9 +21,10 @@ const BitacoraConfiguracion = () => {
         message: '',
     });
 
+
     const fetchConfiguracion = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/configuraciones");
+            const response = await axios.get(`${apiUrl}/api/configuraciones/configuracion-completa`);
             setConfiguracion(response.data);
         } catch (error) {
             console.error("Error al cargar las configuraciones:", error);
@@ -42,7 +45,7 @@ const BitacoraConfiguracion = () => {
         const fetchBitacora = async () => {
 
             try {
-                const response = await axios.get("http://localhost:5000/api/bitacoras-configuracion");
+                const response = await axios.get(`${apiUrl}/api/bitacoras-configuracion`);
                 setBitacoras(response.data);
             } catch (error) {
                 console.error("Error al cargar las bitacoras configuracion:", error);
@@ -57,13 +60,13 @@ const BitacoraConfiguracion = () => {
         };
 
         fetchBitacora();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedBitacora) {
-                await axios.put(`http://localhost:5000/api/bitacoras-configuracion/${selectedBitacora.id_bitacora_configuracion}`, formData);
+                await axios.put(`${apiUrl}/api/bitacoras-configuracion/${selectedBitacora.id_bitacora_configuracion}`, formData);
                 const updateBitacora = bitacoras.map((bitacora) =>
                     bitacora.id_flujo === selectedBitacora.id_bitacora_configuracion ? { ...bitacora, ...formData } : bitacora
                 );
@@ -75,7 +78,7 @@ const BitacoraConfiguracion = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/bitacoras-configuracion', formData);
+                const response = await axios.post(`${apiUrl}/api/bitacoras-configuracion`, formData);
 
 
                 setBitacoras([...bitacoras, { ...formData, id_bitacora_configuracion: response.data.id_bitacora_configuracion }]);
@@ -111,7 +114,7 @@ const BitacoraConfiguracion = () => {
     const handleDelete = async () => {
         setCargando(true)
         try {
-            const response = await fetch(`http://localhost:5000/api/bitacoras-configuracion/${selectedBitacora.id_bitacora_configuracion}`, {
+            const response = await fetch(`${apiUrl}/api/bitacoras-configuracion/${selectedBitacora.id_bitacora_configuracion}`, {
                 method: "DELETE",
             });
 

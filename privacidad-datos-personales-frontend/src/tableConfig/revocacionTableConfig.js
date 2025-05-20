@@ -1,10 +1,10 @@
 const revocacionTableConfig = [
     { label: "ID", field: "id_revocacion" },
-    { label: "id Consentimiento", field: "id_consentimiento" },
-    { label: "id Flujo", field: "id_flujo" },
+    { label: "ID Consentimiento", field: "id_consentimiento" },
+    { label: "ID Flujo", field: "id_flujo" },
     { label: "Usuario", field: "usuario" },
-    { label: "Fecha Revocacion", field: "fecha_revocacion" },
-    { label: "Descripcion", field: "descripcion" },
+    { label: "Fecha Revocación", field: "fecha_revocacion", type: "date" },
+    { label: "Descripción", field: "descripcion" },
 
 
 ];

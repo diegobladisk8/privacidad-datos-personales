@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/", getAllConsentimientos);
 router.get("/:id", getConsentimientoById);
-router.post("", createConsentimiento);
+router.post("/", createConsentimiento);
 router.put("/:id", updateConsentimiento);
 router.delete("/:id", deleteConsentimiento);
 

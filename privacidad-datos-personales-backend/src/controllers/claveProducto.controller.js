@@ -1,21 +1,40 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-
+const serializarBigIntYFechas = (obj) => {
+    if (Array.isArray(obj)) {
+        return obj.map(serializarBigIntYFechas);
+    } else if (obj && typeof obj === 'object') {
+        if (obj instanceof Date) {
+            return obj.toISOString();
+        }
+        const newObj = {};
+        for (const key in obj) {
+            const value = obj[key];
+            if (typeof value === 'bigint') {
+                newObj[key] = value.toString();
+            } else if (value instanceof Date) {
+                newObj[key] = value.toISOString();
+            } else if (typeof value === 'object') {
+                newObj[key] = serializarBigIntYFechas(value);
+            } else {
+                newObj[key] = value;
+            }
+        }
+        return newObj;
+    }
+    return obj;
+};
 // GET - Obtener todas las claves de productos
 export const getClavesProducto = async (req, res) => {
     try {
         const claves = await prisma.clave_producto.findMany({
             include: {
-                producto: true, // incluir los datos del producto relacionado
+                producto: true,
             },
         });
 
-        const resultado = claves.map(c => ({
-            ...c,
-            id_clave_producto: c.id_clave_producto.toString(),
-            id_producto: c.id_producto.toString(),
-        }));
+        const resultado = serializarBigIntYFechas(claves)
 
         res.json(resultado);
     } catch (error) {

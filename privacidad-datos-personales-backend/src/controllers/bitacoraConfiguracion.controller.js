@@ -69,11 +69,22 @@ export const createBitacora = async (req, res) => {
                 fecha_desactivacion: fecha_desactivacion ? new Date(fecha_desactivacion) : null,
             },
         });
-        res.status(201).json(newBitacora);
+
+
+        const responseData = {
+            ...newBitacora,
+            id_bitacora_configuracion: newBitacora.id_bitacora_configuracion.toString(),
+            id_configuracion: newBitacora.id_configuracion.toString(),
+        };
+
+        res.status(201).json(responseData);
+
     } catch (error) {
+        console.error("Error al guardar la Bitacora Configuración:", error);
         res.status(500).json({ error: error.message });
     }
 };
+
 
 export const updateBitacora = async (req, res) => {
     const { id } = req.params;

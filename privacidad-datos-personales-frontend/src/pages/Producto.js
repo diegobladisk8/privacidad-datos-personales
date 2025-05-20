@@ -7,6 +7,8 @@ import productoFormConfig from "../formConfig/productoFormConfig";
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Producto = () => {
     const [productos, setProductos] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -23,7 +25,7 @@ const Producto = () => {
         const fetchProductos = async () => {
             try {
                 setCargando(true)
-                const response = await axios.get("http://localhost:5000/api/productos");
+                const response = await axios.get(`${apiUrl}/api/productos`);
                 setProductos(response.data);
             } catch (error) {
                 console.error("Error al cargar los productos:", error);
@@ -39,14 +41,14 @@ const Producto = () => {
         };
 
         fetchProductos();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedProducto) {
                 // Si estamos editando, hacemos una solicitud PUT
-                await axios.put(`http://localhost:5000/api/productos/${selectedProducto.id_producto}`, formData);
+                await axios.put(`${apiUrl}/api/productos/${selectedProducto.id_producto}`, formData);
 
                 const updateProductos = productos.map((producto) =>
                     producto.id_producto === selectedProducto.id_producto ? { ...producto, ...formData } : producto
@@ -59,7 +61,7 @@ const Producto = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/productos', formData);
+                const response = await axios.post(`${apiUrl}/api/productos`, formData);
 
 
                 setProductos([...productos, { ...formData, id_producto: response.data.id_producto }]);
@@ -94,7 +96,7 @@ const Producto = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/productos/${selectedProducto.id_producto}`, {
+            const response = await fetch(`${apiUrl}/api/productos/${selectedProducto.id_producto}`, {
                 method: "DELETE",
             });
 

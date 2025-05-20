@@ -1,7 +1,7 @@
 const flujoTableConfig = [
     { label: "ID", field: "id_flujo" },
-    { label: "Descripcion", field: "descripcion" },
-    { label: "id_canal", field: "id_canal" },
+    { label: "Descripción", field: "descripcion" },
+    { label: "ID Canal", field: "id_canal" },
 ];
 
 export default flujoTableConfig;

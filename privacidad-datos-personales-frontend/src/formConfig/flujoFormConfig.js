@@ -13,7 +13,7 @@ const flujoFormConfig = (canales) => [
         required: true,
         type: "autocomplete",
         options: canales,
-        getOptionLabel: (option) => `${option.id_canal}`,  // Solo mostrar el ID
+        getOptionLabel: (option) => `${option.descripcion}`,
         getOptionValue: (option) => option.id_canal,
     },
 ];

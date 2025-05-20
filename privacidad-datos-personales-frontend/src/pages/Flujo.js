@@ -7,6 +7,8 @@ import flujoFormConfig from "../formConfig/flujoFormConfig";
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Flujo = () => {
     const [flujos, setFlujos] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -21,7 +23,7 @@ const Flujo = () => {
 
     const fetchCanales = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/canales");
+            const response = await axios.get(`${apiUrl}/api/canales`);
             setCanales(response.data);
         } catch (error) {
             console.error("Error al cargar los canales:", error);
@@ -41,7 +43,7 @@ const Flujo = () => {
         const fetchFlujos = async () => {
             try {
                 setCargando(true)
-                const response = await axios.get("http://localhost:5000/api/flujos");
+                const response = await axios.get(`${apiUrl}/api/flujos`);
                 setFlujos(response.data);
             } catch (error) {
                 console.error("Error al cargar los flujos:", error);
@@ -57,13 +59,13 @@ const Flujo = () => {
         };
 
         fetchFlujos();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedFlujo) {
-                await axios.put(`http://localhost:5000/api/flujos/${selectedFlujo.id_flujo}`, formData);
+                await axios.put(`${apiUrl}/api/flujos/${selectedFlujo.id_flujo}`, formData);
                 const updateFlujos = flujos.map((flujo) =>
                     flujo.id_flujo === selectedFlujo.id_flujo ? { ...flujo, ...formData } : flujo
                 );
@@ -75,7 +77,7 @@ const Flujo = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/flujos', formData);
+                const response = await axios.post(`${apiUrl}/api/flujos`, formData);
 
 
                 setFlujos([...flujos, { ...formData, id_flujo: response.data.id_flujo }]);
@@ -110,7 +112,7 @@ const Flujo = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/flujos/${selectedFlujo.id_flujo}`, {
+            const response = await fetch(`${apiUrl}/api/flujos/${selectedFlujo.id_flujo}`, {
                 method: "DELETE",
             });
 

@@ -1,6 +1,6 @@
 const productoTableConfig = [
     { label: "ID", field: "id_producto" },
-    { label: "Descripcion", field: "descripcion" },
+    { label: "Descripción", field: "descripcion" },
 
 ];
 

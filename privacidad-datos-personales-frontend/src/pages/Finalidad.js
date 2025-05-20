@@ -7,6 +7,8 @@ import finalidadFormConfig from "../formConfig/finalidadFormConfig";
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Finalidad = () => {
     const [finalidades, setFinalidades] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -23,8 +25,8 @@ const Finalidad = () => {
         const fetchFinalidad = async () => {
             try {
                 setCargando(true)
-                const response = await axios.get("http://localhost:5000/api/finalidades");
-                console.log(response)
+                const response = await axios.get(`${apiUrl}/api/finalidades`);
+
                 setFinalidades(response.data);
             } catch (error) {
                 console.error("Error al cargar las finalidades:", error);
@@ -40,14 +42,14 @@ const Finalidad = () => {
         };
 
         fetchFinalidad();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedFinalidad) {
 
-                await axios.put(`http://localhost:5000/api/personas/${selectedFinalidad.id_finalidad}`, formData);
+                await axios.put(`${apiUrl}/api/personas/${selectedFinalidad.id_finalidad}`, formData);
 
                 const updateFinalidad = finalidades.map((finalidad) =>
                     finalidad.id_finalidad === selectedFinalidad.id_finalidad ? { ...finalidad, ...formData } : finalidad
@@ -60,7 +62,7 @@ const Finalidad = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/finalidades', formData);
+                const response = await axios.post(`${apiUrl}/api/finalidades`, formData);
 
 
                 setFinalidades([...finalidades, { ...formData, id_finalidad: response.data.id_finalidad }]);
@@ -95,7 +97,7 @@ const Finalidad = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/finalidades/${selectedFinalidad.id_finalidad}`, {
+            const response = await fetch(`${apiUrl}/api/finalidades/${selectedFinalidad.id_finalidad}`, {
                 method: "DELETE",
             });
 

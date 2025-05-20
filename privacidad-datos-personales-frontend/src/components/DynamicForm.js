@@ -55,7 +55,7 @@ const DynamicForm = ({ fields, onSubmit, onCancel, onDelete, title, initialValue
                                 fullWidth
                                 label={field.label}
                                 value={formData[field.name] || ''}
-                                onChange={(e) => handleChange(field.name, e.target.value)}
+                                onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
                                 variant="outlined"
                                 required={field.required}
                             >

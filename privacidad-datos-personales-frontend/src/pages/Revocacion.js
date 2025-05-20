@@ -7,6 +7,8 @@ import revocacionFormConfig from "../formConfig/revocacionFormConfig";
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Revocacion = () => {
     const [revocaciones, setRevocaciones] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -22,7 +24,7 @@ const Revocacion = () => {
 
     const fetchConsentimientos = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/consentimientos");
+            const response = await axios.get(`${apiUrl}/api/consentimientos`);
             setConsentimientos(response.data);
         } catch (error) {
             console.error("Error al cargar los consentimientos:", error);
@@ -36,7 +38,7 @@ const Revocacion = () => {
 
     const fetchFlujos = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/flujos");
+            const response = await axios.get(`${apiUrl}/api/flujos`);
             setFlujos(response.data);
         } catch (error) {
             console.error("Error al cargar los flujos:", error);
@@ -57,7 +59,7 @@ const Revocacion = () => {
         const fetchRevocaciones = async () => {
             setCargando(true)
             try {
-                const response = await axios.get("http://localhost:5000/api/revocaciones");
+                const response = await axios.get(`${apiUrl}/api/revocaciones`);
                 setRevocaciones(response.data);
             } catch (error) {
                 console.error("Error al cargar las revocaciones:", error);
@@ -73,13 +75,13 @@ const Revocacion = () => {
         };
 
         fetchRevocaciones();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedRevocacion) {
-                await axios.put(`http://localhost:5000/api/revocaciones/${selectedRevocacion.id_revocacion}`, formData);
+                await axios.put(`${apiUrl}/api/revocaciones/${selectedRevocacion.id_revocacion}`, formData);
                 const updateRevocacion = revocaciones.map((revocacion) =>
                     revocacion.id_revocacion === selectedRevocacion.id_revocacion ? { ...revocacion, ...formData } : revocacion
                 );
@@ -91,7 +93,7 @@ const Revocacion = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/revocaciones', formData);
+                const response = await axios.post(`${apiUrl}/api/revocaciones`, formData);
 
 
                 setRevocaciones([...revocaciones, { ...formData, id_revocacion: response.data.id_revocacion }]);
@@ -127,7 +129,7 @@ const Revocacion = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/revocaciones/${selectedRevocacion.id_revocacion}`, {
+            const response = await fetch(`${apiUrl}/api/revocaciones/${selectedRevocacion.id_revocacion}`, {
                 method: "DELETE",
             });
 

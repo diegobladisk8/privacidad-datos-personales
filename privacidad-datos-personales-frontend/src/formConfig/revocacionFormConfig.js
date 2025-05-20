@@ -1,11 +1,11 @@
-const consentimientoFromConfig = (consentimientos, flujos) => [
+const revocacionFromConfig = (consentimientos, flujos) => [
     {
         name: "id_consentimiento",
         label: "id Consentimiento",
         required: true,
         type: "autocomplete",
         options: consentimientos,
-        getOptionLabel: (option) => `${option.id_consentimiento}`,
+        getOptionLabel: (option) => `${option.descripcion}`,
         getOptionValue: (option) => option.id_consentimiento,
     },
     {
@@ -14,7 +14,7 @@ const consentimientoFromConfig = (consentimientos, flujos) => [
         required: true,
         type: "autocomplete",
         options: flujos,
-        getOptionLabel: (option) => `${option.id_flujo}`,
+        getOptionLabel: (option) => `${option.descripcion}`,
         getOptionValue: (option) => option.id_flujo,
     },
 
@@ -36,4 +36,4 @@ const consentimientoFromConfig = (consentimientos, flujos) => [
 ];
 
 
-export default consentimientoFromConfig;
+export default revocacionFromConfig;

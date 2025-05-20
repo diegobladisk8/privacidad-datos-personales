@@ -6,7 +6,7 @@ const bitacoraConfiguracionFormConfig = (configuraciones, isLoadingConfiguracion
         required: true,
         type: "autocomplete",
         options: configuraciones,
-        getOptionLabel: (option) => `${option.id_configuracion}`,
+        getOptionLabel: (option) => `${option.descripcion_completa}`,
         getOptionValue: (option) => option.id_configuracion,
         loading: isLoadingConfiguraciones
     },
@@ -19,6 +19,7 @@ const bitacoraConfiguracionFormConfig = (configuraciones, isLoadingConfiguracion
         label: "Fecha de Registro",
         type: "date",
         required: true,
+
     },
     {
         name: "fecha_desactivacion",

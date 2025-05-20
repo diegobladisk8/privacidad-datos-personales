@@ -7,6 +7,8 @@ import canalTableConfig from '../tableConfig/canalTableConfig'
 import canalFormConfig from "../formConfig/canalFormConfig";
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Canal = () => {
     const [canales, setCanales] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -20,10 +22,10 @@ const Canal = () => {
 
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchCanales = async () => {
             try {
                 setCargando(true)
-                const response = await axios.get("http://localhost:5000/api/canales");
+                const response = await axios.get(`${apiUrl}/api/canales`);
                 setCanales(response.data);
             } catch (error) {
                 console.error("Error al cargar los canales:", error);
@@ -38,15 +40,15 @@ const Canal = () => {
             }
         };
 
-        fetchUsers();
-    }, []);
+        fetchCanales();
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedCanal) {
 
-                await axios.put(`http://localhost:5000/api/canales/${selectedCanal.id_canal}`, formData);
+                await axios.put(`${apiUrl}/api/canales/${selectedCanal.id_canal}`, formData);
 
                 const updateCanales = canales.map((canal) =>
                     canal.id_persona === selectedCanal.id_canal ? { ...canal, ...formData } : canal
@@ -58,8 +60,7 @@ const Canal = () => {
                     message: 'Canal actualizado correctamente',
                 });
             } else {
-                console.log(formData)
-                const response = await axios.post('http://localhost:5000/api/canales', formData);
+                const response = await axios.post(`${apiUrl}/api/canales`, formData);
 
 
                 setCanales([...canales, { ...formData, id_canal: response.data.id_canal }]);
@@ -95,7 +96,7 @@ const Canal = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/canales/${selectedCanal.id_canal}`, {
+            const response = await fetch(`${apiUrl}/api/canales/${selectedCanal.id_canal}`, {
                 method: "DELETE",
             });
 

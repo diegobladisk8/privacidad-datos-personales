@@ -7,6 +7,9 @@ import configuracionFormConfig from "../formConfig/configuracionFormConfig";
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
+
 const Configuracion = () => {
     const [configuraciones, setConfiguraciones] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -24,7 +27,7 @@ const Configuracion = () => {
     const fetchFlujos = async () => {
         try {
 
-            const response = await axios.get("http://localhost:5000/api/flujos");
+            const response = await axios.get(`${apiUrl}/api/flujos`);
             setFlujos(response.data);
         } catch (error) {
             console.error("Error al cargar los flijos:", error);
@@ -37,7 +40,7 @@ const Configuracion = () => {
     };
     const fetchFinalidades = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/finalidades");
+            const response = await axios.get(`${apiUrl}/api/finalidades`);
             setFinalidades(response.data);
         } catch (error) {
             console.error("Error al cargar las finalidades:", error);
@@ -50,7 +53,7 @@ const Configuracion = () => {
     };
     const fetchProductos = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/productos");
+            const response = await axios.get(`${apiUrl}/api/productos`);
             setProductos(response.data);
         } catch (error) {
             console.error("Error al cargar los productos:", error);
@@ -72,8 +75,7 @@ const Configuracion = () => {
         const fetchConfiguraciones = async () => {
             setCargando(true)
             try {
-                const response = await axios.get("http://localhost:5000/api/configuraciones");
-                console.log(response.data)
+                const response = await axios.get(`${apiUrl}/api/configuraciones`);
                 setConfiguraciones(response.data);
             } catch (error) {
                 console.error("Error al cargar las configuraciones:", error);
@@ -89,13 +91,13 @@ const Configuracion = () => {
         };
 
         fetchConfiguraciones();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedConfiguracion) {
-                await axios.put(`http://localhost:5000/api/configuraciones/${selectedConfiguracion.id_configuracion}`, formData);
+                await axios.put(`${apiUrl}/api/configuraciones/${selectedConfiguracion.id_configuracion}`, formData);
                 const updateConfiguraciones = configuraciones.map((confi) =>
                     confi.id_configuracion === selectedConfiguracion.id_configuracion ? { ...confi, ...formData } : confi
                 );
@@ -107,7 +109,7 @@ const Configuracion = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/configuraciones', formData);
+                const response = await axios.post(`${apiUrl}/api/configuraciones`, formData);
 
 
                 setConfiguraciones([...configuraciones, { ...formData, id_configuracion: response.data.id_configuracion }]);
@@ -142,7 +144,7 @@ const Configuracion = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/configuraciones/${selectedConfiguracion.id_configuracion}`, {
+            const response = await fetch(`${apiUrl}/api/configuraciones/${selectedConfiguracion.id_configuracion}`, {
                 method: "DELETE",
             });
 

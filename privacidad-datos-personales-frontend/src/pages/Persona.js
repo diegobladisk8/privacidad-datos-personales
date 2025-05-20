@@ -7,6 +7,8 @@ import personaFormConfig from "../formConfig/personaFormConfig";
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Persona = () => {
     const [users, setUsers] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -23,8 +25,8 @@ const Persona = () => {
         const fetchPersona = async () => {
             try {
                 setCargando(true)
-                const response = await axios.get("http://localhost:5000/api/personas");
-                console.log(response.data)
+                const response = await axios.get(`${apiUrl}/api/personas`);
+
                 setUsers(response.data);
             } catch (error) {
                 console.error("Error al cargar las perosnas:", error);
@@ -39,14 +41,14 @@ const Persona = () => {
         };
 
         fetchPersona();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedUsuario) {
 
-                await axios.put(`http://localhost:5000/api/personas/${selectedUsuario.id_persona}`, formData);
+                await axios.put(`${apiUrl}/api/personas/${selectedUsuario.id_persona}`, formData);
 
                 const updatedUsers = users.map((user) =>
                     user.id_persona === selectedUsuario.id_persona ? { ...user, ...formData } : user
@@ -59,7 +61,7 @@ const Persona = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/personas', formData);
+                const response = await axios.post(`${apiUrl}/api/personas`, formData);
 
 
                 setUsers([...users, { ...formData, id_persona: response.data.id_persona }]);
@@ -94,7 +96,7 @@ const Persona = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/personas/${selectedUsuario.id_persona}`, {
+            const response = await fetch(`${apiUrl}/api/personas/${selectedUsuario.id_persona}`, {
                 method: "DELETE",
             });
 

@@ -28,6 +28,17 @@ const DynamicTable = ({
         if (page < 1 || page > totalPages) return;
         setCurrentPage(page);
     };
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, "0");
+        const dd = String(date.getDate()).padStart(2, "0");
+        const hh = String(date.getHours()).padStart(2, "0");
+        const min = String(date.getMinutes()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+    };
+
 
     return (
         <div className="p-4 bg-white rounded shadow">
@@ -89,7 +100,10 @@ const DynamicTable = ({
                                                     : "No"
                                                 : typeof row[col.field] === "object" && row[col.field] !== null
                                                     ? row[col.field]?.nombre || row[col.field]?.label || row[col.field]?.id || JSON.stringify(row[col.field])
-                                                    : row[col.field]}
+                                                    : col.type === 'date' && row[col.field]
+                                                        ? formatDate(row[col.field])
+                                                        : row[col.field]}
+
                                         </td>
                                     ))}
 

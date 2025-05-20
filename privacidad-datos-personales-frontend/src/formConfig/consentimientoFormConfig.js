@@ -12,11 +12,11 @@ const consentimientoFromConfig = (estadoConsentimientos, configuraciones, person
     },
     {
         name: "id_estado_consentimiento",
-        label: "id Estado Consentimiento",
+        label: "Estado Consentimiento",
         required: true,
         type: "autocomplete",
         options: estadoConsentimientos,
-        getOptionLabel: (option) => `${option.id_estado_consentimiento}`,
+        getOptionLabel: (option) => `${option.descripcion}`,
         getOptionValue: (option) => option.id_estado_consentimiento,
     },
     {
@@ -34,8 +34,8 @@ const consentimientoFromConfig = (estadoConsentimientos, configuraciones, person
         required: true,
         type: "autocomplete",
         options: personas,
-        getOptionLabel: (option) => `${option.id_persona}`,
-        getOptionValue: (option) => option.id_persona,
+        getOptionLabel: (option) => `${option.rut_persona}`,
+        getOptionValue: (option) => option.rut_persona,
     },
     { name: "descripcion", label: "Descripcion", type: "textarea", required: true, rows: 4, multiline: true },
 

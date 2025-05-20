@@ -1,11 +1,11 @@
 const bitacoraConfiguracionTableConfig = [
     { label: "ID", field: "id_bitacora_configuracion" },
-    { label: "id Configuracion", field: "id_configuracion" },
+    { label: "ID Configuración", field: "id_configuracion" },
     { label: "Flujo", field: "flujo" },
     { label: "Finalidad", field: "finalidad" },
     { label: "Descripcion", field: "descripcion" },
-    { label: "Fecha Registro", field: "fecha_registro" },
-    { label: "Fecha de Desactivacion", field: "fecha_desactivacion" },
+    { label: "Fecha Registro", field: "fecha_registro", type: "date" },
+    { label: "Fecha de Desactivación", field: "fecha_desactivacion", type: "date" },
 
 ];
 

@@ -7,6 +7,8 @@ import estadoConsentimientoTableConfig from '../tableConfig/estadoConsentimiento
 import estadoConsentimientoFormConfig from "../formConfig/estadoConsentimientoFormConfig";
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const EstadoConsentimiento = () => {
     const [estadoConsentimiento, setEstadoConsentimiento] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -23,7 +25,7 @@ const EstadoConsentimiento = () => {
         const fetchEstadoConsentimientos = async () => {
             try {
                 setCargando(true)
-                const response = await axios.get("http://localhost:5000/api/estado-consentimientos");
+                const response = await axios.get(`${apiUrl}/api/estado-consentimientos`);
                 setEstadoConsentimiento(response.data);
             } catch (error) {
                 console.error("Error al cargar los estados de Consentimiento:", error);
@@ -39,14 +41,14 @@ const EstadoConsentimiento = () => {
         };
 
         fetchEstadoConsentimientos();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedEC) {
 
-                await axios.put(`http://localhost:5000/api/estado-consentimientos/${selectedEC.id_estado_consentimiento}`, formData);
+                await axios.put(`${apiUrl}/api/estado-consentimientos/${selectedEC.id_estado_consentimiento}`, formData);
 
                 const updateEstadoC = estadoConsentimiento.map((estadoC) =>
                     estadoC.id_persona === selectedEC.id_estado_consentimiento ? { ...estadoConsentimiento, ...formData } : estadoConsentimiento
@@ -58,8 +60,8 @@ const EstadoConsentimiento = () => {
                     message: 'Canal actualizado correctamente',
                 });
             } else {
-                console.log(formData)
-                const response = await axios.post('http://localhost:5000/api/estado-consentimientos', formData);
+
+                const response = await axios.post(`${apiUrl}/api/estado-consentimientos`, formData);
 
 
                 setEstadoConsentimiento([...estadoConsentimiento, { ...formData, id_estado_consentimiento: response.data.id_estado_consentimiento }]);
@@ -95,7 +97,7 @@ const EstadoConsentimiento = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/estado-consentimientos/${selectedEC.id_estado_consentimiento}`, {
+            const response = await fetch(`${apiUrl}/api/estado-consentimientos/${selectedEC.id_estado_consentimiento}`, {
                 method: "DELETE",
             });
 

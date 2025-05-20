@@ -7,6 +7,8 @@ import claveProductoFormConfig from "../formConfig/claveProductoFormConfig";
 import AlertMessage from '../components/AlertMessage';
 import Loader from "../components/Loader";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const ClaveProducto = () => {
     const [claveProducto, setClaveProducto] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -22,7 +24,7 @@ const ClaveProducto = () => {
 
     const fetchProductos = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/productos");
+            const response = await axios.get(`${apiUrl}/api/productos`);
             setProductos(response.data);
         } catch (error) {
             console.error("Error al cargar los productos:", error);
@@ -42,7 +44,7 @@ const ClaveProducto = () => {
         const fetchCP = async () => {
             try {
                 setCargando(true)
-                const response = await axios.get("http://localhost:5000/api/claves-producto");
+                const response = await axios.get(`${apiUrl}/api/claves-producto`);
                 setClaveProducto(response.data);
             } catch (error) {
                 console.error("Error al cargar las claves producto:", error);
@@ -57,14 +59,14 @@ const ClaveProducto = () => {
         };
 
         fetchCP();
-    }, []);
+    }, [showForm]);
 
     const handleCreate = async (formData) => {
         try {
             setCargando(true)
             if (selectedCP) {
 
-                await axios.put(`http://localhost:5000/api/claves-producto/${selectedCP.id_clave_producto}`, formData);
+                await axios.put(`${apiUrl}/api/claves-producto/${selectedCP.id_clave_producto}`, formData);
 
                 const updateCP = claveProducto.map((claveP) =>
                     claveP.id_clave_producto === selectedCP.id_clave_producto ? { ...claveP, ...formData } : claveP
@@ -77,7 +79,7 @@ const ClaveProducto = () => {
                 });
             } else {
 
-                const response = await axios.post('http://localhost:5000/api/claves-producto', formData);
+                const response = await axios.post(`${apiUrl}/api/claves-producto`, formData);
 
 
                 setClaveProducto([...claveProducto, { ...formData, id_clave_producto: response.data.id_clave_producto }]);
@@ -112,7 +114,7 @@ const ClaveProducto = () => {
     const handleDelete = async () => {
         try {
             setCargando(true)
-            const response = await fetch(`http://localhost:5000/api/claves-producto/${selectedCP.id_clave_producto}`, {
+            const response = await fetch(`${apiUrl}/api/claves-producto/${selectedCP.id_clave_producto}`, {
                 method: "DELETE",
             });
 

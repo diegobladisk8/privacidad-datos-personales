@@ -5,7 +5,7 @@ const configuracionFromConfig = (flujos, finalidades, productos) => [
         required: true,
         type: "autocomplete",
         options: flujos,
-        getOptionLabel: (option) => `${option.id_flujo}`,
+        getOptionLabel: (option) => `${option.descripcion}`,
         getOptionValue: (option) => option.id_flujo,
     },
     {
@@ -14,7 +14,7 @@ const configuracionFromConfig = (flujos, finalidades, productos) => [
         required: true,
         type: "autocomplete",
         options: finalidades,
-        getOptionLabel: (option) => `${option.id_finalidad}`,
+        getOptionLabel: (option) => `${option.cabecera}`,
         getOptionValue: (option) => option.id_finalidad,
     },
     {
@@ -23,7 +23,7 @@ const configuracionFromConfig = (flujos, finalidades, productos) => [
         required: true,
         type: "autocomplete",
         options: productos,
-        getOptionLabel: (option) => `${option.id_producto}`,
+        getOptionLabel: (option) => `${option.descripcion}`,
         getOptionValue: (option) => option.id_producto,
     },
     {

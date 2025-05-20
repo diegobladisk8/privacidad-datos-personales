@@ -2,13 +2,13 @@ const personaTableConfig = [
     { label: "ID", field: "id_persona" },
     { label: "Nombre", field: "nombre" },
     { label: "Apellido", field: "apellido" },
-    { label: "rut_persona", field: "rut_persona" },
-    { label: "dv_persona", field: "dv_persona" },
-    { label: "rut_tercero", field: "rut_tercero" },
-    { label: "dv_tercero", field: "dv_tercero" },
-    { label: "es_ftu", field: "es_ftu" },
-    { label: "fecha_registro", field: "fecha_registro" },
-    { label: "fecha_actualizacion_registro", field: "fecha_actualizacion_registro" },
+    { label: "Rut Persona", field: "rut_persona" },
+    { label: "DV Persona", field: "dv_persona" },
+    { label: "RUT Tercero", field: "rut_tercero" },
+    { label: "DV Tercero", field: "dv_tercero" },
+    { label: "¿Es FTU?", field: "es_ftu" },
+    { label: "Fecha Registro", field: "fecha_registro", type: "date" },
+    { label: "Fecha Actualización Registro", field: "fecha_actualizacion_registro", type: "date" },
 ];
 
 export default personaTableConfig;

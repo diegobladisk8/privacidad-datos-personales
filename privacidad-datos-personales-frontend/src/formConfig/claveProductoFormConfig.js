@@ -1,7 +1,8 @@
 const claveProductoFormConfig = (productos) => [
+
     {
-        name: "descripcion",
-        label: "Descripcion",
+        name: "clave",
+        label: "Clave",
         type: "textarea",
         required: true,
         rows: 4,
@@ -13,7 +14,7 @@ const claveProductoFormConfig = (productos) => [
         required: true,
         type: "autocomplete",
         options: productos,
-        getOptionLabel: (option) => `${option.id_producto}`,
+        getOptionLabel: (option) => `${option.descripcion}`,
         getOptionValue: (option) => option.id_producto,
     },
 ];
